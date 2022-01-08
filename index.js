@@ -1,5 +1,6 @@
 // const { request, response } = require("express");
-const express=require("express");
+import  { MongoClient } from "mongodb";
+import express from "express";
 const app = express();
 
 const PORT=9000;
@@ -77,6 +78,20 @@ preparation:"This biryani is cooked by dum style where the chicken and rice are 
                 use:"used to erase",
 
               }];
+
+
+const MONGO_URL="mongodb:localhost";
+async function createConnection(){
+  const client= new MongoClient(MONGO_URL);
+  await client.connect();
+  console.log("Mongodb connected");
+}
+createConnection();
+
+
+
+
+
   //             const msg="no matching recipe found";
   
               
@@ -93,7 +108,7 @@ app.get("/recipes",(request,response)=>{
   console.log(request.query);
 
 const{name,chef}=request.query;
-  console.log(name,chef);
+  // console.log(name,chef);
 
 
   let filteredRecipes=recipes;
