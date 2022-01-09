@@ -109,7 +109,10 @@ app.use(express.json());
 app.post("/recipes",async(request,response)=>{
   const data =request.body;
   console.log(data);
-  const result= await client.db("node").collection("recipes").insertMany(data);
+  const result= await client
+  .db("node")
+  .collection("recipes")
+  .insertMany(data);
   response.send(result);
 
 });
@@ -119,12 +122,13 @@ app.post("/recipes",async(request,response)=>{
 app.get("/recipes",async (request,response)=>{
   console.log(request.query);
 
-const{name,chef}=request.query;
+const filter=request.query;
+console.log(filter);
  
 const filteredRecipes= await client
 .db("node")
 .collection("recipes")
-.find({})
+.find(filter)
 .toArray();
 console.log(filteredRecipes);
  
