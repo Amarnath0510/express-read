@@ -45,7 +45,7 @@ app.use(express.json());
 
  
  app.get("/",(request,response)=>{
-   response.send("Hey amar You Are here  In Buddy 🙋‍♂️🌞🌞🌞🤳");
+   response.send("Hey amar You Are here  In Buddy 🙋‍♂️🌞🌞🌞🥙🤳");
  });
 
 app.use("/recipes",recipesRouter);
