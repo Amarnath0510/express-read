@@ -93,10 +93,7 @@ app.use(express.json());
 
               
             
-// const MONGO_URL = "mongodb+srv://amarmuthu:amarmuthu007@cluster0.7zd6g.mongodb.net";
 
-// const MONGO_URL =   mongodb+srv://<username>:<password>@cluster0.7zd6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-//  const MONGO_URL = "mongodb://localhost";
 
  async function createConnection() {
    const client = new MongoClient(MONGO_URL);
