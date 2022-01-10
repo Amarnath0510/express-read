@@ -1,7 +1,15 @@
 // const { request, response } = require("express");
 
 import  { Db, MongoClient } from "mongodb";
-import express from "express";
+import express, { response } from "express";
+import dotenv from 'dotenv';
+// import req from "express/lib/request";
+
+dotenv.config();
+console.log(process.env);
+const MONGO_URL=process.env.MONGO_URL;
+
+
 const app = express();
 
  const PORT=9000;
@@ -85,10 +93,11 @@ app.use(express.json());
 
               
             
- 
+// const MONGO_URL = "mongodb+srv://amarmuthu:amarmuthu007@cluster0.7zd6g.mongodb.net";
 
+// const MONGO_URL =   mongodb+srv://<username>:<password>@cluster0.7zd6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+//  const MONGO_URL = "mongodb://localhost";
 
- const MONGO_URL = "mongodb://localhost";
  async function createConnection() {
    const client = new MongoClient(MONGO_URL);
   await client.connect();
@@ -109,10 +118,7 @@ app.use(express.json());
 app.post("/recipes",async(request,response)=>{
   const data =request.body;
   console.log(data);
-  const result= await client
-  .db("node")
-  .collection("recipes")
-  .insertMany(data);
+  const result= await createRecipes(data);
   response.send(result);
 
 });
@@ -125,11 +131,7 @@ app.get("/recipes",async (request,response)=>{
 const filter=request.query;
 console.log(filter);
  
-const filteredRecipes= await client
-.db("node")
-.collection("recipes")
-.find(filter)
-.toArray();
+const filteredRecipes= await getRecipes(filter);
 console.log(filteredRecipes);
  
 response.send(filteredRecipes);
@@ -145,16 +147,51 @@ response.send(filteredRecipes);
 app.get("/recipes/:id",async(request,response)=>{
   console.log(request.params);
  const {id}=request.params;
- const recipe=await client
- .db("node")
- .collection("recipes")
-.findOne({id:id});
+ const recipe=await getrecipeById(id);
 //  const recipe=recipes.find((rcp)=>rcp.id===id);
 console.log(recipe);
  recipe
 ? response.send(recipe)
-:response.send({message:"No Matching recipe🥙🥙 found"})
+:response.status(404).send({message:"No Matching recipe🥙🥙 found"})
 });
+
+
+
+
+app.put("/recipes/:id", async(request,response)=>{
+  console.log(request.params);
+  const {id}=request.params;
+  const data=request.body;
+
+  const result= await updateRecipeById(id, data);
+  const recipe=await getrecipeById(id);
+
+  response.send(recipe);
+
+
+
+});
+
+
+
+
+
+
+app.delete("/recipes/:id", async(request,response)=>{
+  console.log(request.params);
+  const {id}=request.params;
+  const deletedRecipe = await deleteRecipeById(id);
+
+ deletedRecipe.deletedCount>0
+ ?response.send(deletedRecipe)
+ :response.status(404).send({message:"No matching recipe 🥙🥙found"})
+});
+
+
+
+
+
+
 
 
 
@@ -165,3 +202,45 @@ app.get("/things",(request,response)=>{
   response.send(things);
 });
 app.listen(PORT,()=>console.log("App is stared in",PORT) );
+
+
+
+
+
+
+
+async function updateRecipeById(id, data) {
+  return await client
+    .db("node")
+    .collection("recipes")
+    .updateOne({ id: id }, { $set: data });
+}
+
+async function createRecipes(data) {
+  return await client
+    .db("node")
+    .collection("recipes")
+    .insertMany(data);
+}
+
+async function getRecipes(filter) {
+  return await client
+    .db("node")
+    .collection("recipes")
+    .find(filter)
+    .toArray();
+}
+
+async function deleteRecipeById(id) {
+  return await client
+    .db("node")
+    .collection("recipes")
+    .deleteOne({ id: id });
+}
+
+async function getrecipeById(id) {
+  return await client
+    .db("node")
+    .collection("recipes")
+    .findOne({ id: id });
+}
