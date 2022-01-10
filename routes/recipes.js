@@ -1,9 +1,10 @@
 import express from "express";
+
+import{ createRecipes, getRecipes, getrecipeById, updateRecipeById, deleteRecipeById } from "../helper.js";
 const router=express.Router();
 
 
-
-router.post("/recipes",async(request,response)=>{
+router.post("/",async(request,response)=>{
     const data =request.body;
     console.log(data);
     const result= await createRecipes(data);
@@ -11,9 +12,8 @@ router.post("/recipes",async(request,response)=>{
   
   });
   
-
   
-  router.get("/recipes",async (request,response)=>{
+  router.get("/",async (request,response)=>{
     console.log(request.query);
   
   const filter=request.query;
@@ -26,13 +26,7 @@ router.post("/recipes",async(request,response)=>{
     }
   );
   
-  
-  
-  
-  
-  
-  
-  router.get("/recipes/:id",async(request,response)=>{
+  router.get("/:id",async(request,response)=>{
     console.log(request.params);
    const {id}=request.params;
    const recipe=await getrecipeById(id);
@@ -42,11 +36,8 @@ router.post("/recipes",async(request,response)=>{
   ? response.send(recipe)
   :response.status(404).send({message:"No Matching recipe🥙🥙 found"})
   });
-  
-  
-  
-  
-  router.put("/recipes/:id", async(request,response)=>{
+   
+  router.put("/:id", async(request,response)=>{
     console.log(request.params);
     const {id}=request.params;
     const data=request.body;
@@ -59,13 +50,9 @@ router.post("/recipes",async(request,response)=>{
   
   
   });
+   
   
-  
-  
-  
-  
-  
-  router.delete("/recipes/:id", async(request,response)=>{
+  router.delete("/:id", async(request,response)=>{
     console.log(request.params);
     const {id}=request.params;
     const deletedRecipe = await deleteRecipeById(id);
@@ -75,5 +62,5 @@ router.post("/recipes",async(request,response)=>{
    :response.status(404).send({message:"No matching recipe 🥙🥙found"})
   });
 
-  export const recipesRouter = router;
+  export const recipesRouter= router;
   

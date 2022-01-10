@@ -4,10 +4,12 @@ import  { Db, MongoClient } from "mongodb";
 import express, { response } from "express";
 import dotenv from 'dotenv';
 import { createRecipes, getRecipes, getrecipeById, updateRecipeById, deleteRecipeById } from "./helper.js";
+import {recipesRouter} from "./routes/recipes.js";
+
 // import req from "express/lib/request";
 
 dotenv.config();
-console.log(process.env);
+ console.log(process.env);
 const MONGO_URL=process.env.MONGO_URL;
 
 
@@ -49,92 +51,20 @@ app.use(express.json());
 app.use("/recipes",recipesRouter);
 
 
-// app.post("/recipes",async(request,response)=>{
-//   const data =request.body;
-//   console.log(data);
-//   const result= await createRecipes(data);
-//   response.send(result);
 
+
+
+
+
+
+
+
+
+
+
+// app.get("/things",(request,response)=>{
+//   response.send(things);
 // });
-
-
-
-// app.get("/recipes",async (request,response)=>{
-//   console.log(request.query);
-
-// const filter=request.query;
-// console.log(filter);
- 
-// const filteredRecipes= await getRecipes(filter);
-// console.log(filteredRecipes);
- 
-// response.send(filteredRecipes);
-//   }
-// );
-
-
-
-
-
-
-
-// app.get("/recipes/:id",async(request,response)=>{
-//   console.log(request.params);
-//  const {id}=request.params;
-//  const recipe=await getrecipeById(id);
-// //  const recipe=recipes.find((rcp)=>rcp.id===id);
-// console.log(recipe);
-//  recipe
-// ? response.send(recipe)
-// :response.status(404).send({message:"No Matching recipe🥙🥙 found"})
-// });
-
-
-
-
-// app.put("/recipes/:id", async(request,response)=>{
-//   console.log(request.params);
-//   const {id}=request.params;
-//   const data=request.body;
-
-//   const result= await updateRecipeById(id, data);
-//   const recipe=await getrecipeById(id);
-
-//   response.send(recipe);
-
-
-
-// });
-
-
-
-
-
-
-// app.delete("/recipes/:id", async(request,response)=>{
-//   console.log(request.params);
-//   const {id}=request.params;
-//   const deletedRecipe = await deleteRecipeById(id);
-
-//  deletedRecipe.deletedCount>0
-//  ?response.send(deletedRecipe)
-//  :response.status(404).send({message:"No matching recipe 🥙🥙found"})
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-app.get("/things",(request,response)=>{
-  response.send(things);
-});
 app.listen(PORT,()=>console.log("App is stared in",PORT) );
 
 
